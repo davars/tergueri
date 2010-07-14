@@ -1,4 +1,4 @@
-(defproject vidston-aws "0.0.1-SNAPSHOT"
+(defproject tergueri "0.0.1-SNAPSHOT"
   :description "Very incomplete wrapper for Amazon's AWS SDK for Java"
   :dependencies [[org.clojure/clojure "1.2.0-master-SNAPSHOT"]
                  [org.clojure/clojure-contrib "1.2.0-SNAPSHOT"]

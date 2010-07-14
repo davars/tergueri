@@ -1,5 +1,5 @@
-(ns vidston-aws.s3
-  (:use vidston-.common)
+(ns tergueri.s3
+  (:use tergueri.common)
   (:import java.io.ByteArrayInputStream
 	   com.amazonaws.services.s3.AmazonS3Client
 	   (com.amazonaws.services.s3.model ObjectMetadata)))

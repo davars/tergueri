@@ -18,8 +18,8 @@
        If you're using this lib to receive messages but want send them
        using something else, send \"strings\" instead of strings."}
 
-  vidston-aws.sqs
-  (:require [vidston-aws.common :as common]
+  tergueri.sqs
+  (:require [tergueri.common :as common]
 	    [clojure.contrib 
 	     [json :as json]])
   (:import com.amazonaws.services.sqs.AmazonSQSClient

@@ -1,6 +1,6 @@
-(ns vidston-aws.simpledb
+(ns tergueri.simpledb
   (:require [clojure.contrib.string :as str]
-	    [vidston-aws.common :as common])
+	    [tergueri.common :as common])
   (:import com.amazonaws.services.simpledb.AmazonSimpleDBClient
 	   com.amazonaws.services.simpledb.util.SimpleDBUtils
 	   (com.amazonaws.services.simpledb.model Attribute

@@ -1,6 +1,6 @@
-(ns vidston-aws.sns
+(ns tergueri.sns
   (:use (clojure.contrib json)
-	vidston-aws.common)
+	tergueri.common)
   (:import com.amazonaws.services.sns.AmazonSNSClient
 	   (com.amazonaws.services.sns.model CreateTopicRequest
 					     DeleteTopicRequest

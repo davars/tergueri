@@ -1,4 +1,4 @@
-(ns vidston-aws.settings
+(ns tergueri.settings
   (:use clojure.contrib.properties)
   (:import java.util.ResourceBundle))
 

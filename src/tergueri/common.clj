@@ -1,7 +1,7 @@
-(ns vidston-aws.common
+(ns tergueri.common
   (:use clojure.java.io
 	clojure.contrib.str-utils
-	vidston-aws.settings)
+	tergueri.settings)
   (:import com.amazonaws.services.simpledb.util.SimpleDBUtils))
 
 (defn credentials []
@@ -25,7 +25,7 @@
     (pr-str value))
 
 (defn decode-value [s]
-  (binding [*ns* (the-ns 'vidston-aws.common)]
+  (binding [*ns* (the-ns ' tergueri.common)]
     (read-string s)))
 
 (defn is->bytes [is]
