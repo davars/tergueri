@@ -18,6 +18,11 @@ property "aws.properties.file".
 
 ## Installation
 
+Download [saxon9he.jar](http://github.com/downloads/davars/tergueri/saxon9he.jar) and install it to your local maven repo:
+    $ mvn install:install-file -Dfile=saxon9he.jar -DgroupId=net.sf.saxon \
+                     -DartifactId=saxon9he -Dversion=9.0.2j -Dpackaging=jar
+
+Then build and install:
     $ lein deps && lein pom && lein install
 
 ## License
