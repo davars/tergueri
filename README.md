@@ -21,7 +21,7 @@ property "aws.properties.file".
     $ lein deps && lein pom && lein install
 
 ## License
-### vidston-aws
+    vidston-aws
     Copyright (c) David Jack. All rights reserved.
 
     The use and distribution terms for this software are covered by the
