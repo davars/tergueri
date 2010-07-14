@@ -15,9 +15,8 @@
        decoded.  The :Message field of the JSON object then becomes
        the :body of the message map returned.
 
-       If you're using something else to send messages, send
-       \"strings\" instead of strings, or use something else to get
-       your messages."}
+       If you're using this lib to receive messages but want send them
+       using something else, send \"strings\" instead of strings."}
 
   vidston-aws.sqs
   (:require [vidston-aws.common :as common]
