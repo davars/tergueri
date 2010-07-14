@@ -1,4 +1,4 @@
-# vidston-aws
+# Tergueri
 
 A very incomplete wrapper for Amazon's AWS SDK for Java.  I'm adding
 to this accodring to the needs of my own projects.  If you are reading
@@ -7,7 +7,7 @@ this, I highly encourage you to fork and extend!
 ## Usage
 
 In project.clj:
-    :dependencies [[vidston-aws/vidston-aws "0.0.1-SNAPSHOT"]]
+    :dependencies [[tergueri/tergueri "0.0.1-SNAPSHOT"]]
 
 Create aws.properties somewhere on classpath containing:
     aws.key.access = <access key>
@@ -21,7 +21,7 @@ property "aws.properties.file".
     $ lein deps && lein pom && lein install
 
 ## License
-    vidston-aws
+    Tergueri
     Copyright (c) David Jack. All rights reserved.
 
     The use and distribution terms for this software are covered by the
