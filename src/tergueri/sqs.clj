@@ -61,7 +61,7 @@
 	str 
 	decode-base64
 	json/read-json
-	(:Message)
+	:Message
 	common/decode-value)
     body))
 
