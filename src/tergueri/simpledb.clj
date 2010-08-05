@@ -15,13 +15,13 @@
 						  ReplaceableItem
 						  SelectRequest)))
 
-(def ^{:doc "If bound, all functions will communicate through this
-             client object.  Otherwise, a new client will be created
-             for each call."}  
-     *sdb-client* nil)
+(def ^{:doc 
+  "If bound, all functions will communicate through this client
+  object. Otherwise, a new client will be created for each call."}
+  *sdb-client* nil)
 
 (defn sdb-client 
-  "Gets an SimpleDB client object by either returning the one bound to
+  "Gets a SimpleDB client object by either returning the one bound to
   *sdb-client* or creating a new one."  
   []
   (or *sdb-client*
