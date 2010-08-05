@@ -79,12 +79,11 @@
 		     (.setVisibilityTimeout vis-timeout)
 		     (.setMaxNumberOfMessages n))
 	   messages (.getMessages (.receiveMessage (sqs-client) request))]
-       (seq (and messages 
-		 (map #(-> %
-			   bean
-			   (assoc :queueUrl url)
-			   (update-in [:body] read-body))
-		      messages))))))
+       (seq (map #(-> %
+		      bean
+		      (assoc :queueUrl url)
+		      (update-in [:body] read-body))
+		 messages)))))
 
 (defn delete-message [{:keys [queueUrl receiptHandle]}]
   (.deleteMessage (sqs-client)
