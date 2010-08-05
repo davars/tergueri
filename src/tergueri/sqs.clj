@@ -20,8 +20,7 @@
 
   tergueri.sqs
   (:require [tergueri.common :as common]
-	    [clojure.contrib 
-	     [json :as json]])
+	    [clojure.contrib.json :as json])
   (:import com.amazonaws.services.sqs.AmazonSQSClient
 	   (com.amazonaws.services.sqs.model CreateQueueRequest
 					     DeleteQueueRequest

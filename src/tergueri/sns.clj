@@ -1,6 +1,6 @@
 (ns tergueri.sns
-  (:use (clojure.contrib json)
-	tergueri.common)
+  (:require [tergueri.common :as common]
+	    [clojure.contrib.json :as json])
   (:import com.amazonaws.services.sns.AmazonSNSClient
 	   (com.amazonaws.services.sns.model CreateTopicRequest
 					     DeleteTopicRequest
@@ -9,7 +9,7 @@
 					     SubscribeRequest)))
 
 (defn sns-client []
-  (AmazonSNSClient. (credentials)))
+  (AmazonSNSClient. (common/credentials)))
 
 (defn create-topic [client topic-name]
   (.getTopicArn
@@ -21,7 +21,7 @@
 (defn get-topic-attributes [client arn]
   (let [result (.getTopicAttributes client (GetTopicAttributesRequest. arn))
 	attr-map (into {} (.getAttributes result))]
-    (update-in attr-map ["Policy"] read-json)))
+    (update-in attr-map ["Policy"] json/read-json)))
 
 (defn subscribe [client arn proto endpoint]
   (.subscribe client (SubscribeRequest. 
@@ -30,4 +30,4 @@
 (defn publish
   "Publishes clojure value as a print-dup'd string"
   [client arn message]
-  (.publish client (PublishRequest. arn (encode-value message))))
+  (.publish client (PublishRequest. arn (common/encode-value message))))
