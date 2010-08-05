@@ -30,9 +30,14 @@
 					     SendMessageRequest
 					     SetQueueAttributesRequest)
 	   org.apache.commons.codec.binary.Base64))
+(def ^{:doc 
+  "If bound, all functions will communicate through this client object.
+  Otherwise, a new client will be created for each call."}
+  *sqs-client* nil)
 
 (defn sqs-client []
-  (AmazonSQSClient. (common/credentials)))
+  (or *sqs-client*
+      (AmazonSQSClient. (common/credentials))))
 
 (defn create-queue [queue-name]
   (.getQueueUrl (.createQueue (sqs-client) 
