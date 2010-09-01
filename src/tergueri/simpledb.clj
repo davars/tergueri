@@ -164,8 +164,16 @@
 			       :next-token new-next-token})))))
 
 (defn query
+  "domain: string domain name
+   attributes: sequence of string attribute names, defaults to [\"*\"]
+   where: string where clause in sdb syntax, ex (format \"`attribute` = '%s'\" (encode-value parameter))
+   sort: pair of strings, [\"attribute\" \"dir\"], where dir is 'asc' or 'desc'
+   limit: integer
+   offset: also integer
+
+   Returns a lazy list of attribute maps."
   [{:keys 
-    [domain attributes where sort limit offset next-token] 
+    [domain attributes where sort limit offset] 
     :as query-map}]
   (let [client (sdb-client)
 	token (if (and offset (> offset 0))
