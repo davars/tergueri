@@ -42,3 +42,15 @@
    true
    (catch Exception e false)))
 
+(defn- object-summary-seq [listing]
+  (lazy-cat
+   (.getObjectSummaries listing)
+   (if (.isTruncated listing) 
+     (object-summary-seq
+      (.listNextBatchOfObjects (s3-client) listing)))))
+
+(defn list-objects [bucket]
+  (let [listing (-> (s3-client)
+		    (.listObjects bucket)
+		    object-summary-seq)]
+    (map bean listing)))
