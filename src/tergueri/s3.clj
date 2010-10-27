@@ -36,11 +36,13 @@
 (defn create-url [bucket-name key valid-for-millis]
   (.generatePresignedUrl (s3-client) bucket-name key (time-in valid-for-millis)))
 
-(defn in-bucket? [bucket-name key]
+(defn object-metadata [bucket-name key]
   (try
    (.getObjectMetadata (s3-client) bucket-name key)
-   true
-   (catch Exception e false)))
+   (catch com.amazonaws.services.s3.model.AmazonS3Exception e nil)))
+
+(defn in-bucket? [bucket-name key]
+  (if (object-metadata bucket-name key) true false))
 
 (defn- object-summary-seq [listing]
   (lazy-cat
