@@ -119,7 +119,7 @@
 	       (.setName item-name))]
     (item->map item)))
 
-(defn- select [client q next-token]
+(defn- select-request [client q next-token]
   (.select client (doto (SelectRequest. q)
 		    (.setNextToken next-token))))
   
@@ -127,7 +127,7 @@
   ([client q]
      (run-query client q nil))
   ([client q next-token]
-     (let [result (select client q next-token)
+     (let [result (select-request client q next-token)
 	   next-token (.getNextToken result)
 	   results (map item->map (.getItems result))]
        (if next-token
@@ -136,7 +136,7 @@
 	 results))))
 
 (defn- order-string [[attribute direction]]
-  (str " order by " (name attribute) " " (name direction)))
+  (str " order by `" (name attribute) "` " (name direction)))
 (defn- where-string [where-clause]
   (str " where " where-clause))
 (defn- query-string [{:keys [domain attributes where sort limit]}]
@@ -154,7 +154,7 @@
 (defn- skip-token 
   [client {:keys [offset] :as query-map}]
   (let [q (count-string query-map)
-	result (select client q (:next-token query-map))
+	result (select-request client q (:next-token query-map))
 	n (-> result .getItems first item->map :Count)
 	new-next-token (.getNextToken result)]
     (if (or (not new-next-token) (= n offset))
@@ -185,7 +185,70 @@
 	
 (defn count-items [domain where]
   "Returns the number of items in domain matching the SimpleDB query 'where' clause."
-  (-> (sdb-client)
+  (-> ;(sdb-client)
       (query {:domain domain :attributes ["count(*)"] :where where})
       first
       :Count))
+
+(declare translate-expr)
+(defn translate-attr [attr] 
+  (cond
+   (seq? attr) `(translate-expr ~attr)
+   (= '* attr) "*"
+   (= 'count attr) "count(*)"
+   (= 'itemName attr) "itemName()"
+   :else `(format "`%s`" ~(name attr))))
+
+(let [translators {:expr    (fn [expr]    `(translate-expr ~expr))
+		   :op      (fn [op]      `(.replace (name '~op) \- \space))
+		   :attr    translate-attr
+		   :val     (fn [val]     `(format "'%s'"
+						   (common/encode-value ~val)))
+		   :val-seq (fn [val-seq] `(str/join "," 
+						     (map
+						      translate-val
+						      ~val-seq)))}]
+  (defn- translate [template form]
+    (let [[fmt & tln] template]
+      `(format ~fmt ~@(map #((translators %1) %2) tln form)))))
+
+(defmacro translate-expr [form]
+  (let [template
+	(condp #(%1 %2) (first form)
+	  '#{= != > >= < <= like not-like}
+	  ["%2$s %1$s %3$s" :op :attr :val]
+	  '#{and or intersection}
+	  ["(%2$s) %1$s (%3$s)" :op :expr :expr]
+	  '#{not}
+	  ["%s (%s)" :op :expr]
+	  '#{is-null is-not-null}
+	  ["%2$s %1$s" :op :attr]
+	  '#{every} 
+	  ["%s(%s)" :op :attr]
+	  '#{between}
+	  ["%2$s %1$s %3$s and %4$s"
+	   :op :attr :val :val]
+	  '#{in} 
+	  ["%2$s %1$s (%3$s)" :op :attr :val-seq]
+	  ["%s" :op])]
+    (translate template form)))
+
+(defn- translate-clause [clause]
+  (let [[op arg] clause]
+    (case op
+	  'limit  [:limit  arg]
+	  'offset [:offset arg]
+	  'where  [:where  `(translate-expr ~arg)]
+	  'sort   [:sort   (->> clause
+				rest
+				(map name)
+				vec)]
+	  [:attributes (vec (map translate-attr clause))])))
+
+(defmacro select [domain & args]
+  (let [clauses (map translate-clause args)
+	query-data (into
+		    {:domain (name domain)}
+		    clauses)]
+    `(query ~query-data)))
+	
