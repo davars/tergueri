@@ -139,7 +139,7 @@
   (str " order by `" (name attribute) "` " (name direction)))
 (defn- where-string [where-clause]
   (str " where " where-clause))
-(defn- query-string [{:keys [domain attributes where sort limit]}]
+(defn query-string [{:keys [domain attributes where sort limit]}]
   (str "select " (str/join "," (or attributes ["*"]))
        " from `" domain "`"
        (if where (where-string where))
@@ -250,5 +250,6 @@
 	query-data (into
 		    {:domain (name domain)}
 		    clauses)]
+;    `(query-string ~query-data)))
     `(query ~query-data)))
 	
