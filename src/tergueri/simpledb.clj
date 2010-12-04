@@ -199,11 +199,14 @@
    (= 'itemName attr) "itemName()"
    :else `(format "`%s`" ~(name attr))))
 
+(defn translate-val [val]
+  (format "'%s'"
+	  (common/encode-value val)))
+
 (let [translators {:expr    (fn [expr]    `(translate-expr ~expr))
 		   :op      (fn [op]      `(.replace (name '~op) \- \space))
 		   :attr    translate-attr
-		   :val     (fn [val]     `(format "'%s'"
-						   (common/encode-value ~val)))
+		   :val     (fn [val]     `(translate-val ~val))
 		   :val-seq (fn [val-seq] `(str/join "," 
 						     (map
 						      translate-val
@@ -250,6 +253,5 @@
 	query-data (into
 		    {:domain (name domain)}
 		    clauses)]
-;    `(query-string ~query-data)))
     `(query ~query-data)))
 	

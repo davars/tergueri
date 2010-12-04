@@ -31,7 +31,18 @@
        (select test-domain [itemName])     [{:id "id1"} {:id "id2"}]
        (select test-domain [key1])         [{:id "id1", :key1 "val1-1"} 
 				            {:id "id2", :key1 "val1-2"}]
+
        (select test-domain 
-       	       (where (is-not-null key2))) [{:id "id1", 
-       					     :key1 "val1-1", 
-       					     :key2 {:some "map", :of :values}}]))
+       	       (where (is-not-null key2))) 
+       [{:id "id1", 
+	 :key1 "val1-1", 
+	 :key2 {:some "map", :of :values}}]
+
+       (select test-domain
+	       (where (in key1 ["val1-1" "val1-2"]))) 
+       [{:id "id1", 
+	 :key1 "val1-1", 
+	 :key2 {:some "map", :of :values}} 
+	{:id "id2", 
+	 :key3 {:some "map", :of :values}, 
+	 :key1 "val1-2"}]))
