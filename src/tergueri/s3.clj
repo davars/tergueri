@@ -3,9 +3,18 @@
   (:import java.io.ByteArrayInputStream
 	   com.amazonaws.services.s3.AmazonS3Client
 	   (com.amazonaws.services.s3.model ObjectMetadata)))
-   
-(defn s3-client []
-  (AmazonS3Client. (credentials)))
+
+(def ^{:doc 
+  "If bound, all functions will communicate through this client
+  object. Otherwise, a new client will be created for each call."}
+  *s3-client* nil)
+
+(defn s3-client 
+  "Gets a SimpleDB client object by either returning the one bound to
+  *sdb-client* or creating a new one."  
+  []
+  (or *s3-client*
+      (AmazonS3Client. (credentials))))
 
 (defn put-bytes
   [bucket-name key content-type bytes]
